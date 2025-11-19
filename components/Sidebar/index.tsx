@@ -2,15 +2,36 @@
 
 import React, { useState } from 'react'
 import Image from "next/image"
-import { Briefcase, Home, LockIcon, LucideIcon, Search, Settings, User, Users, X, } from 'lucide-react';
+import {
+    AlertCircle,
+    AlertOctagon,
+    AlertTriangle,
+    Briefcase,
+    ChevronDown,
+    ChevronUp,
+    Home,
+    Layers3,
+    LockIcon,
+    LucideIcon,
+    Search,
+    Settings,
+    ShieldAlert,
+    User,
+    Users,
+    X,
+
+} from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { useAppDispatch, useAppSelector } from '@/app/redux';
 import Link from 'next/link';
 import { setIsSidebarCollapsed } from '@/state';
+import { useGetProjectsQuery } from '@/state/api';
 
 const Sidebar = () => {
     const [showProjects, setShowProjects] = useState(true);
     const [showPriority, setShowPriority] = useState(true)
+
+    const { data: projects } = useGetProjectsQuery();
 
     const dispatch = useAppDispatch();
 
@@ -40,7 +61,7 @@ const Sidebar = () => {
                         (<button className="py-3" onClick={() => dispatch(setIsSidebarCollapsed(!isSidebarCollapsed))}>
 
                             <X className='h-6 w-6 text-gray-800 hover:text-gray-500 dark:text-white' />
-                        
+
                         </button>)
                     }
 
@@ -68,7 +89,7 @@ const Sidebar = () => {
                 </div>
 
 
-                {/* Navbar Links */}
+                {/* {navbar link} */}
                 <nav className="z-10 w-full" >
                     <SidebarLink icon={Home}
                         label="Home"
@@ -97,6 +118,58 @@ const Sidebar = () => {
                 </nav>
 
 
+
+                {/* projLinks */}
+                <button onClick={() => setShowProjects((prev) => !prev)} className='flex w-full items-center justify-between px-8 py-3 text-gray-500'>
+
+                    <span className=''>Projects</span>
+                    {showProjects ?
+                        (<ChevronUp className='h-5 w-5' />) :
+                        (<ChevronDown className='h-5 w-5' />)}
+
+                </button>
+                {/* projList */}
+                {showProjects && projects?.map((project) => (
+                    <SidebarLink key={project.id} icon={Briefcase} label={project.name}
+                        href={`/projects/${project.id}`} />
+                ))}
+
+
+                {/* prioLinks */}
+                <button onClick={() => setShowPriority((prev) => !prev)} className='flex w-full items-center justify-between px-8 py-3 text-gray-500'>
+
+                    <span className=''>Priority</span>
+                    {showPriority ?
+                        (<ChevronUp className='h-5 w-5' />) :
+                        (<ChevronDown className='h-5 w-5' />)}
+
+                </button>
+                {showPriority && (
+                    <>
+                        <SidebarLink icon={AlertCircle}
+                            label="Urgent"
+                            href="/priority/urgent"
+                        />
+                        <SidebarLink icon={ShieldAlert}
+                            label="High"
+                            href="/priority/high"
+                        />
+                        <SidebarLink icon={AlertTriangle}
+                            label="Medium"
+                            href="/priority/medium"
+                        />
+                        <SidebarLink icon={AlertOctagon}
+                            label="Low"
+                            href="/priority/low"
+                        />
+                        <SidebarLink icon={Layers3}
+                            label="Backlog"
+                            href="/priority/backlog"
+                        />
+                    </>
+                )}
+
+
             </div>
         </div>
     )
@@ -117,7 +190,8 @@ const SidebarLink = ({
 }:
     SidebarLinkProps) => {
     const pathname = usePathname();
-    const isActive = pathname === href || ([pathname === "/" && href === "/dashboard"])
+    const isActive = pathname === href || (pathname === "/" && href === "/dashboard");
+
     // const screenWidth = window.innerWidth;
 
     // const dispatch = useAppDispatch();

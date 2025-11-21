@@ -3,8 +3,8 @@ export interface Project {
   id: number;
   name: string;
   description?: string;
-  startDate?: string;
-  endDate?: string;
+  startDate?: Date;
+  endDate?: Date;
 }
 export interface User {
   userId?: number;
@@ -26,13 +26,13 @@ export interface Task {
   id: number;
   title: string;
   description?: string;
-  status: Status;
+  status?: Status;
   priority?: Priority;
   tags?: string;
-  startDate?: string;
-  dueDate?: string;
+  startDate?: Date;
+  dueDate?: Date;
   points?: number;
-  projectId: string;
+  projectId: number;
   authorUserId?: number;
   assignedUserId?: number;
 

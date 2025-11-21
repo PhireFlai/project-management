@@ -5,6 +5,7 @@ import Board from '../BoardView'
 import List from "../ListView"
 import Timeline from "../TimelineView"
 import Table from "../TableView"
+import ModalNewTask from '@/components/ModalNewTask'
 interface Props {
     params: Promise<{ id: string }>;
 }
@@ -21,6 +22,12 @@ const Project = ({ params }: Props) => {
     return (
         <div>
             {/* modal new task */}
+            <ModalNewTask
+                isOpen={isModalNewTaskOpen}
+                onClose={() => setIsModalNewTaskOpen(false)}
+                id={id}
+            />
+
 
             <ProjectHeader activeTab={activeTab} setActiveTab={setActiveTab} />
 
